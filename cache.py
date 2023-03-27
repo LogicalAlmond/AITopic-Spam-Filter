@@ -73,26 +73,3 @@ grabber = WebCache()
 grabber.get('https://dev.i2kconnect.com/i2kweb/webapi/search', 'cdids.txt', 'i2k_new.csv')
 grabber.cleanCSV('i2k_new.csv')
 grabber.concat('i2k_new.csv')
-
-# Base url to send requests to
-# url = "https://dev.i2kconnect.com/i2kweb/webapi/search"
-
-# counter = 1 # Just so i can keep track of how far along in requests we are
-# with open('newcd.txt', 'r') as f:
-#     for line in f:
-#         payload = { "q":f"cdid:{line}", "fields": "pagetext,cdid,source,title"}
-#         encodedPayload = ul.urlencode(payload)        
-#         headers = {
-#             'Authorization': constants.key,
-#             'Content-Type': 'application/x-www-form-urlencoded',
-#             'Cookie': ''
-#         }
-#         print(f'Sending request #{counter}')
-#         response = requests.request("POST", url, headers=headers, data=encodedPayload)
-#         data = response.json()
-#         df = pd.DataFrame(data)
-#         if (os.path.exists('newData.csv')):
-#             df.to_csv('newData.csv',mode='a', index=False, header=False, sep=',')
-#         else:
-#             df.to_csv('newData.csv', index=False, header=['pagetext','cdid','source','title'], sep=',')
-#         counter += 1
