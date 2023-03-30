@@ -7,9 +7,10 @@ import json
 
 class WebCache:
     def __init__(self):
-        self.csv = None
+        pass
     
-    def get(self, url: str, txtFile: object, outputFile: str):
+    
+    def get(self, url: str, txtFile: str, outputFile: str):
         '''Get data from aitopics API
         
         Arguments:
@@ -18,7 +19,7 @@ class WebCache:
         
         Result:
         Saves the returned JSON data into a CSV file named 'dataset.csv'
-        with 4 headers ['pagetext', 'cdid', 'source', 'title']
+        with 3 headers ['pagetext', 'source', 'title']
         '''
         getUrl = url
         fileName = txtFile
@@ -26,7 +27,7 @@ class WebCache:
         with open(fileName, 'r') as f:
             counter = 1
             for line in f:
-                payload = { "q":f"cdid:{line}", "fields": "title,pagetext,cdid,source"}
+                payload = { "q":f"cdid:{line}", "fields": "title,pagetext,source"}
                 encodedPayload = ul.urlencode(payload)       
                 headers = {
                     'Authorization': constants.key,
@@ -42,13 +43,11 @@ class WebCache:
                 if (os.path.exists(outputFile)):
                     df.to_csv(outputFile, mode='a', index=False, header=False, sep=',')
                 else:
-                    df.to_csv(outputFile, index=False, header=['title', 'pagetext', 'cdid', 'source'], sep=',')
+                    df.to_csv(outputFile, index=False, header=['title', 'pagetext', 'source'], sep=',')
                 counter += 1
+             
                 
-    def cleanCSV(self, csvFile):
-        '''
-        
-        '''
+    def cleanCSV(self, csvFile: str):
         data = pd.read_csv(csvFile)
         df = pd.DataFrame(data)
         
@@ -57,17 +56,19 @@ class WebCache:
         
         # Iterate list and strip characters out
         for i in range(len(pagetext)):
-            strippedText = pagetext[i].strip('[\'"1::]')
+            strippedText = pagetext[i].strip('[\'"1::],')
             df['pagetext'][i] = strippedText
             
-        df.to_csv(csvFile, index=False, header=['title', 'pagetext', 'cdid', 'source'], sep=',')
+        df.to_csv(csvFile, index=False, header=['title', 'pagetext', 'source'], sep=',')
         
-    def concat(self, input_: object):
+        
+    def concat(self, input_: str):
         data = pd.read_csv(input_)
         df1 = pd.DataFrame(data)
         df2 = pd.DataFrame()
-        df2['text'] = df1['title'] + ', ' + df1['pagetext'] + ', ' + df1['cdid'] + ', ' + df1['source']
+        df2['text'] = df1['title'] + ' ' + df1['pagetext'] + ' ' + df1['source']
         df2.to_csv(input_, index=False, header=['text'])
+
 
 grabber = WebCache()
 grabber.get('https://dev.i2kconnect.com/i2kweb/webapi/search', 'cdids.txt', 'i2k_new.csv')
