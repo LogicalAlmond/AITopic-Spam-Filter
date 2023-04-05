@@ -1,4 +1,4 @@
-from simpletransformers.classification import Classification, ClassificationArgs
+from simpletransformers.classification import ClassificationModel, ClassificationArgs
 from sklearn.metrics import accuracy_score
 import pandas as pd
 import logging
@@ -38,7 +38,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 # Create a ClassificationModel
-model = Classification(
+model = ClassificationModel(
     'roberta', 'roberta-base', use_cuda=False, args=model_args
 )
 
