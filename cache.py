@@ -29,13 +29,9 @@ class WebCache:
             raw_data = json.loads(response.text)
             
             raw_data_df = pd.DataFrame(raw_data)
-            
-            if (os.path.exists(OUTPUT_FILE)):
-                raw_data_df.to_csv(OUTPUT_FILE, mode='a', index=False, header=False, sep=',')
-            else:
-                raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
+            raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
 
-                
+
     def cleanCSV(self, csvFile: str):
         data = pd.read_csv(csvFile)
         df = pd.DataFrame(data)
