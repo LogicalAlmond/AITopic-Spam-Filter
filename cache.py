@@ -53,9 +53,17 @@ class WebCache:
         raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
         
     
-    def concat(self, input_: str):
-        data = pd.read_csv(input_)
-        df1 = pd.DataFrame(data)
-        df2 = pd.DataFrame()
-        df2['text'] = df1['title'] + ' ' + df1['pagetext'] + ' ' + df1['source']
-        df2.to_csv(input_, index=False, header=['text'])
+    def transform_data(self, interim_csv_file):
+        OUTPUT_FILE = 'processed_data.csv'
+        OUTPUT_DIR = 'data/processed'
+        CWD = os.getcwd()
+        
+        interim_data = pd.read_csv(interim_csv_file)
+        interim_data_df = pd.DataFrame(interim_data)
+        
+        if (CWD != os.path.join(os.getcwd(), OUTPUT_DIR)):
+            os.chdir(os.path.join(os.getcwd(), OUTPUT_DIR))
+        
+        processed_data = pd.DataFrame()
+        processed_data['text'] = interim_data_df['title'] + ' ' + interim_data_df['pagetext'] + ' ' + interim_data_df['source']
+        processed_data.to_csv(OUTPUT_FILE, index=False, header=['text'])
