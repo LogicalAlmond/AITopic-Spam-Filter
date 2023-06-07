@@ -42,7 +42,6 @@ class WebCache:
         
         if (CWD != os.path.join(os.getcwd(), OUTPUT_DIR)):
             os.chdir(os.path.join(os.getcwd(), OUTPUT_DIR))
-            print(os.getcwd())
 
         columns = ['pagetext']
         for col in columns:
