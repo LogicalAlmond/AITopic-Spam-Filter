@@ -35,20 +35,27 @@ class WebCache:
             else:
                 raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
 
-                
-    def cleanCSV(self, csvFile: str):
-        data = pd.read_csv(csvFile)
-        df = pd.DataFrame(data)
+         
+    def clean_raw_data(self, raw_csv_file):
+        OUTPUT_FILE = 'interim_data.csv'
+        OUTPUT_DIR = 'data/interim'
+        CWD = os.getcwd()
         
-        # Grab pagetext column and put into list
-        pagetext = data['pagetext'].tolist()
+        raw_data = pd.read_csv(raw_csv_file)
+        raw_data_df = pd.DataFrame(raw_data)
         
-        # Iterate list and strip characters out
-        for i in range(len(pagetext)):
-            strippedText = pagetext[i].strip('[\'"1::]')
-            df['pagetext'][i] = strippedText
-                        
-        df.to_csv(csvFile, index=False, header=['title', 'pagetext', 'source'], sep=',')
+        if (CWD != os.path.join(os.getcwd(), OUTPUT_DIR)):
+            os.chdir(os.path.join(os.getcwd(), OUTPUT_DIR))
+            print(os.getcwd())
+
+        columns = ['pagetext']
+        for col in columns:
+            text = raw_data[col].tolist()
+            for i in range(len(text)):
+                cleaned_text = text[i].strip('[\'"1::]')
+                raw_data_df[col][i] = cleaned_text
+
+        raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
         
     
     def concat(self, input_: str):
@@ -57,3 +64,7 @@ class WebCache:
         df2 = pd.DataFrame()
         df2['text'] = df1['title'] + ' ' + df1['pagetext'] + ' ' + df1['source']
         df2.to_csv(input_, index=False, header=['text'])
+        
+        
+grab = WebCache()
+grab.clean_raw_data('data/raw/raw_data.csv')
