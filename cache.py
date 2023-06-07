@@ -29,13 +29,9 @@ class WebCache:
             raw_data = json.loads(response.text)
             
             raw_data_df = pd.DataFrame(raw_data)
-            
-            if (os.path.exists(OUTPUT_FILE)):
-                raw_data_df.to_csv(OUTPUT_FILE, mode='a', index=False, header=False, sep=',')
-            else:
-                raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
+            raw_data_df.to_csv(OUTPUT_FILE, index=False, header=['title', 'pagetext', 'source', 'cdid'], sep=',')
 
-         
+
     def clean_raw_data(self, raw_csv_file):
         OUTPUT_FILE = 'interim_data.csv'
         OUTPUT_DIR = 'data/interim'
@@ -64,7 +60,3 @@ class WebCache:
         df2 = pd.DataFrame()
         df2['text'] = df1['title'] + ' ' + df1['pagetext'] + ' ' + df1['source']
         df2.to_csv(input_, index=False, header=['text'])
-        
-        
-grab = WebCache()
-grab.clean_raw_data('data/raw/raw_data.csv')
