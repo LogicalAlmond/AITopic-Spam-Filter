@@ -82,6 +82,3 @@ class WebCache:
         
         cdid = interim_data_df['cdid']
         cdid.to_csv(OUTPUT_FILE, index=False, header=['cdid'])
-        
-grab_data = WebCache()
-grab_data.parse_cdid('data/interim/interim_data.csv')
